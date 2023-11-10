@@ -1,0 +1,98 @@
+{
+	"common": {
+		"name": "strava",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "Strava",
+		"titleLang": {
+			"en": "Strava",
+			"de": "Strava",
+			"ru": "Strava",
+			"pt": "Strava",
+			"nl": "Strava",
+			"fr": "Strava",
+			"it": "Strava",
+			"es": "Strava",
+			"pl": "Strava",
+			"zh-cn": "Strava"
+		},
+		"desc": {
+			"en": "Adapter to integrate fitnes data from strava into ioBroker",
+			"de": "Adapter to integrate fitnes data from strava into ioBroker",
+			"ru": "Adapter to integrate fitnes data from strava into ioBroker",
+			"pt": "Adapter to integrate fitnes data from strava into ioBroker",
+			"nl": "Adapter to integrate fitnes data from strava into ioBroker",
+			"fr": "Adapter to integrate fitnes data from strava into ioBroker",
+			"it": "Adapter to integrate fitnes data from strava into ioBroker",
+			"es": "Adapter to integrate fitnes data from strava into ioBroker",
+			"pl": "Adapter to integrate fitnes data from strava into ioBroker",
+			"zh-cn": "Adapter to integrate fitnes data from strava into ioBroker"
+		},
+		"authors": ["Børge Grunicke <boerge@grunicke.de>"],
+		"keywords": ["iobroker", "fitness", "health"],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "build/main.js",
+		"icon": "strava.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/boergegrunicke/ioBroker.strava/main/admin/strava.png",
+		"readme": "https://github.com/boergegrunicke/ioBroker.strava/blob/main/README.md",
+		"loglevel": "info",
+		"mode": "schedule",
+		"allowInit": true,
+		"type": "health",
+		"compact": true,
+		"connectionType": "cloud",
+		"dataSource": "poll",
+		"adminUI": {
+			"config": "json",
+			"tab": "materialize"
+		},
+		"adminTab": {
+			"singleton": true,
+			"name": {
+				"en": "Strava",
+				"de": "Strava",
+				"ru": "Strava",
+				"pt": "Strava",
+				"nl": "Strava",
+				"fr": "Strava",
+				"it": "Strava",
+				"es": "Strava",
+				"pl": "Strava",
+				"zh-cn": "Strava"
+			},
+			"link": "",
+			"fa-icon": "info"
+		},
+		"dependencies": [
+			{
+				"js-controller": ">=3.3.22"
+			}
+		],
+		"globalDependencies": [
+			{
+				"admin": ">=5.1.13"
+			}
+		]
+	},
+	"native": {
+		"clientId": "",
+		"clientSecret": ""
+	},
+	"objects": [],
+	"instanceObjects": []
+}
