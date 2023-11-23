@@ -91,7 +91,8 @@
 	},
 	"native": {
 		"clientId": "",
-		"clientSecret": ""
+		"clientSecret": "",
+		"access_token": ""
 	},
 	"objects": [],
 	"instanceObjects": []

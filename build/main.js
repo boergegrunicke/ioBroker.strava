@@ -18,6 +18,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var utils = __toESM(require("@iobroker/adapter-core"));
+var import_strava_v3 = __toESM(require("strava-v3"));
 class Strava extends utils.Adapter {
   constructor(options = {}) {
     super({
@@ -29,6 +30,11 @@ class Strava extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
+    import_strava_v3.default.config({
+      client_id: this.config.clientId,
+      client_secret: "Your apps Client Secret (Required for oauth)",
+      redirect_uri: "Your apps Authorization Redirection URI (Required for oauth)"
+    });
     this.log.info("config clientId: " + this.config.clientId);
     this.log.info("config clientSecret: " + this.config.clientSecret);
     await this.setObjectNotExistsAsync("testVariable", {
