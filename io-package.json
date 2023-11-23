@@ -92,7 +92,10 @@
 	"native": {
 		"clientId": "",
 		"clientSecret": "",
-		"access_token": ""
+		"authCode": "",
+		"authUrl": "",
+		"access_token": "",
+		"refreshToken": ""
 	},
 	"objects": [],
 	"instanceObjects": []

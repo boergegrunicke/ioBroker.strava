@@ -6,6 +6,10 @@ declare global {
 		interface AdapterConfig {
 			clientId: string;
 			clientSecret: string;
+			authCode: string;
+			authUrl: string;
+			accessToken: string;
+			refreshToken: string;
 		}
 	}
 }

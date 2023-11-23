@@ -30,32 +30,45 @@ class Strava extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
-    import_strava_v3.default.config({
-      client_id: this.config.clientId,
-      client_secret: "Your apps Client Secret (Required for oauth)",
-      redirect_uri: "Your apps Authorization Redirection URI (Required for oauth)"
-    });
     this.log.info("config clientId: " + this.config.clientId);
     this.log.info("config clientSecret: " + this.config.clientSecret);
-    await this.setObjectNotExistsAsync("testVariable", {
-      type: "state",
-      common: {
-        name: "testVariable",
-        type: "boolean",
-        role: "indicator",
-        read: true,
-        write: true
-      },
-      native: {}
+    this.log.info("config authCode: " + this.config.authCode);
+    if (!this.config.clientId || !this.config.clientSecret) {
+      this.log.error("ERROR - client id AND client secret MUST be configured");
+      return;
+    }
+    import_strava_v3.default.config({
+      client_id: this.config.clientId,
+      client_secret: this.config.clientId,
+      access_token: "",
+      redirect_uri: ""
     });
-    this.subscribeStates("testVariable");
-    await this.setStateAsync("testVariable", true);
-    await this.setStateAsync("testVariable", { val: true, ack: true });
-    await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-    let result = await this.checkPasswordAsync("admin", "iobroker");
-    this.log.info("check user admin pw iobroker: " + result);
-    result = await this.checkGroupAsync("admin", "admin");
-    this.log.info("check group user admin group admin: " + result);
+    if (!this.config.authCode) {
+      import_strava_v3.default.config({
+        access_token: "Your apps access token (Required for Quickstart)",
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret,
+        redirect_uri: "http://localhost"
+      });
+      const oauthArgs = {
+        client_id: this.config.clientId,
+        redirect_uri: "http://localhost",
+        response_type: "code"
+      };
+      const url = import_strava_v3.default.oauth.getRequestAccessURL(oauthArgs).toString();
+      this.config.authUrl = url;
+      this.log.info(url);
+      return;
+    }
+    this.log.info("code present ... proceed");
+    if (!this.config.accessToken) {
+      import_strava_v3.default.oauth.getToken(this.config.authCode, function(e, p) {
+        console.log(e);
+        console.log(p);
+      }).catch((e) => {
+        console.log(e);
+      });
+    }
   }
   onUnload(callback) {
     try {

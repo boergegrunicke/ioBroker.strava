@@ -30,64 +30,51 @@ class Strava extends utils.Adapter {
 		// this.config:
 		this.log.info('config clientId: ' + this.config.clientId);
 		this.log.info('config clientSecret: ' + this.config.clientSecret);
+		this.log.info('config authCode: ' + this.config.authCode);
 
 		// Initialize your adapter here
+
+		if (!this.config.clientId || !this.config.clientSecret) {
+			this.log.error('ERROR - client id AND client secret MUST be configured');
+			return;
+		}
 		strava.config({
-			access_token: 'Your apps access token (Required for Quickstart)',
 			client_id: this.config.clientId,
-			client_secret: this.config.clientSecret,
-			redirect_uri: 'http://localhost',
-		});
-		strava.init()
-		let url = strava.oauth.getRequestAccessURL();
-		this.log.info()
-
-		strava.activities.get();
-
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectNotExistsAsync('testVariable', {
-			type: 'state',
-			common: {
-				name: 'testVariable',
-				type: 'boolean',
-				role: 'indicator',
-				read: true,
-				write: true,
-			},
-			native: {},
+			client_secret: this.config.clientId,
+			access_token: '',
+			redirect_uri: '',
 		});
 
-		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-		this.subscribeStates('testVariable');
-		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-		// this.subscribeStates('lights.*');
-		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-		// this.subscribeStates('*');
+		if (!this.config.authCode) {
+			strava.config({
+				access_token: 'Your apps access token (Required for Quickstart)',
+				client_id: this.config.clientId,
+				client_secret: this.config.clientSecret,
+				redirect_uri: 'http://localhost',
+			});
+			const oauthArgs = {
+				client_id: this.config.clientId,
+				redirect_uri: 'http://localhost',
+				response_type: 'code',
+			};
+			const url = strava.oauth.getRequestAccessURL(oauthArgs).toString();
+			this.config.authUrl = url;
+			this.log.info(url);
+			return;
+		}
 
-		/*
-			setState examples
-			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync('testVariable', true);
+		this.log.info('code present ... proceed');
 
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync('testVariable', { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync('testVariable', { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync('admin', 'iobroker');
-		this.log.info('check user admin pw iobroker: ' + result);
-
-		result = await this.checkGroupAsync('admin', 'admin');
-		this.log.info('check group user admin group admin: ' + result);
+		if (!this.config.accessToken) {
+			strava.oauth
+				.getToken(this.config.authCode, function (e, p) {
+					console.log(e);
+					console.log(p);
+				})
+				.catch((e) => {
+					console.log(e);
+				});
+		}
 	}
 
 	/**

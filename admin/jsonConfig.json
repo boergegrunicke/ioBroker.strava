@@ -2,15 +2,40 @@
 	"i18n": true,
 	"type": "panel",
 	"items": {
+		"_instructions": {
+			"type": "staticText",
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"text": "_oauthInstructions"
+		},
 		"clientId": {
 			"type": "text",
 			"label": "Client ID",
-			"newLine": true
+			"sm": 3,
+			"md": 2,
+			"lg": 1
 		},
 		"clientSecret": {
-			"type": "text",
+			"type": "password",
 			"label": "Client Secret",
-			"newLine": true
+			"visible": true,
+			"sm": 3,
+			"md": 2,
+			"lg": 2
+		},
+		"_authUrlHeader": {
+			"type": "staticText",
+			"sm": 12,
+			"md": 12,
+			"lg": 12,
+			"text": "_authUrlHeader"
+		},
+		"authCode": {
+			"type": "text",
+			"sm": 12,
+			"md": 6,
+			"lg": 3
 		}
 	}
 }
