@@ -38,18 +38,12 @@ class Strava extends utils.Adapter {
       return;
     }
     import_strava_v3.default.config({
+      access_token: "Your apps access token (Required for Quickstart)",
       client_id: this.config.clientId,
-      client_secret: this.config.clientId,
-      access_token: "",
-      redirect_uri: ""
+      client_secret: this.config.clientSecret,
+      redirect_uri: "http://localhost"
     });
     if (!this.config.authCode) {
-      import_strava_v3.default.config({
-        access_token: "Your apps access token (Required for Quickstart)",
-        client_id: this.config.clientId,
-        client_secret: this.config.clientSecret,
-        redirect_uri: "http://localhost"
-      });
       const oauthArgs = {
         client_id: this.config.clientId,
         redirect_uri: "http://localhost",
