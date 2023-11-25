@@ -24,6 +24,21 @@
 			"md": 2,
 			"lg": 2
 		},
+		"_authenticate": {
+			"newLine": true,
+			"variant": "contained",
+			"color": "primary",
+			"disabled": "!_alive",
+			"type": "sendTo",
+			"error": {
+				"connect timeout": "Connection timeout"
+			},
+			"icon": "auth",
+			"command": "getOAuthStartLink",
+			"jsonData": "{\"redirect_uri_base\": \"${data._origin}\"}",
+			"label": "Authenticate with Strava",
+			"openUrl": true
+		},
 		"_authUrlHeader": {
 			"type": "staticText",
 			"sm": 12,

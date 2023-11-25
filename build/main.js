@@ -27,6 +27,7 @@ class Strava extends utils.Adapter {
     });
     this.on("ready", this.onReady.bind(this));
     this.on("stateChange", this.onStateChange.bind(this));
+    this.on("message", this.onMessage.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
@@ -43,6 +44,10 @@ class Strava extends utils.Adapter {
       client_secret: this.config.clientSecret,
       redirect_uri: "http://localhost"
     });
+    if (this.config.authUrl) {
+      this.log.error("Please use the url : " + this.config.authUrl);
+      return;
+    }
     if (!this.config.authCode) {
       const oauthArgs = {
         client_id: this.config.clientId,
@@ -52,16 +57,6 @@ class Strava extends utils.Adapter {
       const url = import_strava_v3.default.oauth.getRequestAccessURL(oauthArgs).toString();
       this.config.authUrl = url;
       this.log.info(url);
-      return;
-    }
-    this.log.info("code present ... proceed");
-    if (!this.config.accessToken) {
-      import_strava_v3.default.oauth.getToken(this.config.authCode, function(e, p) {
-        console.log(e);
-        console.log(p);
-      }).catch((e) => {
-        console.log(e);
-      });
     }
   }
   onUnload(callback) {
@@ -76,6 +71,16 @@ class Strava extends utils.Adapter {
       this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
     } else {
       this.log.info(`state ${id} deleted`);
+    }
+  }
+  onMessage(obj) {
+    this.log.info("on message: " + JSON.stringify(obj));
+    if (typeof obj === "object" && obj.message) {
+      if (obj.command === "send") {
+        this.log.info("send command");
+        if (obj.callback)
+          this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+      }
     }
   }
 }

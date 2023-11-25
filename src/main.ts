@@ -18,7 +18,7 @@ class Strava extends utils.Adapter {
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
-		// this.on('message', this.onMessage.bind(this));
+		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 	}
 
@@ -45,6 +45,10 @@ class Strava extends utils.Adapter {
 			redirect_uri: 'http://localhost',
 		});
 
+		if (this.config.authUrl) {
+			this.log.error('Please use the url : ' + this.config.authUrl);
+			return;
+		}
 		if (!this.config.authCode) {
 			const oauthArgs = {
 				client_id: this.config.clientId,
@@ -54,20 +58,14 @@ class Strava extends utils.Adapter {
 			const url = strava.oauth.getRequestAccessURL(oauthArgs).toString();
 			this.config.authUrl = url;
 			this.log.info(url);
-			return;
 		}
-		this.log.info('code present ... proceed');
 
-		if (!this.config.accessToken) {
-			strava.oauth
-				.getToken(this.config.authCode, function (e, p) {
-					console.log(e);
-					console.log(p);
-				})
-				.catch((e) => {
-					console.log(e);
-				});
-		}
+		// if (!this.config.accessToken) {
+		// 	const r = await strava.oauth.getToken(this.config.authCode);
+		// 	this.log.info('response : ' + JSON.stringify(r));
+		// 	this.log.info('access_token : ' + r.access_token);
+		// 	this.log.info('refreh_token : ' + r.refresh_token);
+		// }
 	}
 
 	/**
@@ -120,17 +118,18 @@ class Strava extends utils.Adapter {
 	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
 	//  * Using this method requires "common.messagebox" property to be set to true in io-package.json
 	//  */
-	// private onMessage(obj: ioBroker.Message): void {
-	// 	if (typeof obj === 'object' && obj.message) {
-	// 		if (obj.command === 'send') {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info('send command');
+	private onMessage(obj: ioBroker.Message): void {
+		this.log.info('on message: ' + JSON.stringify(obj));
+		if (typeof obj === 'object' && obj.message) {
+			if (obj.command === 'send') {
+				// e.g. send email or pushover or whatever
+				this.log.info('send command');
 
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-	// 		}
-	// 	}
-	// }
+				// Send response in callback if required
+				if (obj.callback) this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+			}
+		}
+	}
 }
 
 if (require.main !== module) {
